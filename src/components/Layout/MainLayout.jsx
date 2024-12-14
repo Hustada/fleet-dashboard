@@ -1,9 +1,10 @@
 import React from 'react';
 import { Box, AppBar, Toolbar, Typography, IconButton, Drawer, useTheme, Avatar, Badge, useMediaQuery } from '@mui/material';
-import { Menu as MenuIcon, Notifications as NotificationsIcon, Close as CloseIcon, Chat as ChatIcon } from '@mui/icons-material';
+import { Menu as MenuIcon, Notifications as NotificationsIcon, Close as CloseIcon, Chat as ChatIcon, LightMode as LightModeIcon, DarkMode as DarkModeIcon } from '@mui/icons-material';
 import SidebarContent from '../Navigation/SidebarContent';
 import ChatPanel from '../Chat/ChatPanel';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useThemeMode } from '../../contexts/ThemeContext';
 
 const DRAWER_WIDTH = 280;
 const CHAT_WIDTH = 320;
@@ -14,6 +15,7 @@ const MainLayout = ({ children }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [chatOpen, setChatOpen] = React.useState(false);
+  const { mode, toggleTheme } = useThemeMode();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -101,6 +103,7 @@ const MainLayout = ({ children }) => {
           ml: { sm: `${DRAWER_WIDTH}px` },
           bgcolor: 'background.paper',
           backgroundImage: `linear-gradient(to right, ${theme.palette.background.paper}, ${theme.palette.background.darker})`,
+          color: mode === 'light' ? 'primary.main' : 'common.white',
         }}
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
@@ -109,28 +112,53 @@ const MainLayout = ({ children }) => {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ 
+              mr: 2, 
+              display: { sm: 'none' },
+              color: mode === 'light' ? 'primary.main' : 'inherit',
+            }}
           >
             <MenuIcon />
           </IconButton>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Typography variant="h6" noWrap component="div">
+            <Typography 
+              variant="h6" 
+              noWrap 
+              component="div"
+              sx={{ color: mode === 'light' ? 'primary.main' : 'inherit' }}
+            >
               Dashboard
             </Typography>
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <IconButton
-              color="inherit"
+              aria-label="toggle theme"
+              onClick={toggleTheme}
+              sx={{ 
+                mr: 1,
+                color: mode === 'light' ? 'primary.main' : 'inherit',
+              }}
+            >
+              {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
+            </IconButton>
+            <IconButton
               aria-label="toggle chat"
               onClick={handleChatToggle}
-              sx={{ mr: 1 }}
+              sx={{ 
+                mr: 1,
+                color: mode === 'light' ? 'primary.main' : 'inherit',
+              }}
               data-testid="chat-toggle"
             >
               <ChatIcon data-testid="chat-button" />
             </IconButton>
-            <IconButton color="inherit">
+            <IconButton 
+              sx={{ 
+                color: mode === 'light' ? 'primary.main' : 'inherit',
+              }}
+            >
               <Badge badgeContent={4} color="error">
                 <NotificationsIcon />
               </Badge>

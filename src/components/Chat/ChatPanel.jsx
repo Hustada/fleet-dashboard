@@ -95,13 +95,14 @@ const ChatPanel = ({ agents, open, onClose }) => {
         </Box>
 
         {/* Agent Selector */}
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel id="agent-select-label">Select Agent</InputLabel>
+        <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
+          <InputLabel id="agent-select-label" sx={{ bgcolor: 'background.paper', px: 1 }}>Select Agent</InputLabel>
           <Select
             labelId="agent-select-label"
             id="agent-select"
             value={selectedAgent}
             onChange={handleAgentChange}
+            label="Select Agent"
             displayEmpty
             renderValue={(selected) => {
               if (!selected) return "Select an agent";
