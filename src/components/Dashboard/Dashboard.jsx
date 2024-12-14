@@ -7,6 +7,7 @@ import {
   Task as TaskIcon,
   Memory as ProcessingIcon,
 } from '@mui/icons-material';
+import AgentList from '../Agents/AgentList';
 
 const StatCard = ({ title, value, icon, color }) => {
   const theme = useTheme();
@@ -110,6 +111,10 @@ const Dashboard = () => {
           </Grid>
         ))}
       </Grid>
+
+      <Box sx={{ mt: 4 }}>
+        <AgentList />
+      </Box>
 
       {/* Next we'll add:
           - Agent status list showing each agent's current task

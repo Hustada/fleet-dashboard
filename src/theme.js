@@ -16,10 +16,10 @@ const theme = createTheme({
     background: {
       default: '#0A1929',
       paper: '#132F4C',
-      darker: '#071421',
+      darker: '#051E34',
     },
     text: {
-      primary: '#ffffff',
+      primary: '#fff',
       secondary: 'rgba(255, 255, 255, 0.7)',
     },
     error: {
@@ -31,6 +31,7 @@ const theme = createTheme({
     success: {
       main: '#00E676',
     },
+    divider: 'rgba(255, 255, 255, 0.12)',
   },
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -114,6 +115,13 @@ const theme = createTheme({
           borderRadius: 8,
           textTransform: 'none',
           fontWeight: 500,
+        },
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          backgroundImage: 'none',
         },
       },
     },
