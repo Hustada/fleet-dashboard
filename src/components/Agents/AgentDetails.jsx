@@ -13,6 +13,15 @@ import {
   useTheme,
   Paper,
   Grid,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Switch,
+  FormControlLabel,
+  Slider,
+  Divider,
 } from '@mui/material';
 import {
   Timeline,
@@ -180,6 +189,179 @@ ActivityTimeline.propTypes = {
   ).isRequired,
 };
 
+const SettingsPanel = () => {
+  const theme = useTheme();
+  const [model, setModel] = React.useState('gpt-4');
+  const [temperature, setTemperature] = React.useState(0.7);
+  const [maxTokens, setMaxTokens] = React.useState(2000);
+  const [notifications, setNotifications] = React.useState(true);
+  const [autoSave, setAutoSave] = React.useState(true);
+  const [emailNotifications, setEmailNotifications] = React.useState(true);
+  
+  return (
+    <Box sx={{ p: 2 }}>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Typography variant="h6" gutterBottom>
+            Model Configuration
+          </Typography>
+          <Paper sx={{ p: 2 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth>
+                  <InputLabel id="model-label">Model</InputLabel>
+                  <Select
+                    labelId="model-label"
+                    id="model-select"
+                    value={model}
+                    label="Model"
+                    onChange={(e) => setModel(e.target.value)}
+                    MenuProps={{
+                      PaperProps: {
+                        sx: {
+                          bgcolor: 'background.paper',
+                          backgroundImage: 'none',
+                        },
+                      },
+                    }}
+                  >
+                    <MenuItem value="gpt-4">GPT-4</MenuItem>
+                    <MenuItem value="gpt-3.5-turbo">GPT-3.5 Turbo</MenuItem>
+                    <MenuItem value="claude-2">Claude 2</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth>
+                  <InputLabel id="max-tokens-label">Max Tokens</InputLabel>
+                  <Select
+                    labelId="max-tokens-label"
+                    id="max-tokens-select"
+                    value={maxTokens}
+                    label="Max Tokens"
+                    onChange={(e) => setMaxTokens(e.target.value)}
+                    MenuProps={{
+                      PaperProps: {
+                        sx: {
+                          bgcolor: 'background.paper',
+                          backgroundImage: 'none',
+                        },
+                      },
+                    }}
+                  >
+                    <MenuItem value={1000}>1000</MenuItem>
+                    <MenuItem value={2000}>2000</MenuItem>
+                    <MenuItem value={4000}>4000</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography gutterBottom>Temperature: {temperature}</Typography>
+                <Slider
+                  value={temperature}
+                  onChange={(e, newValue) => setTemperature(newValue)}
+                  min={0}
+                  max={1}
+                  step={0.1}
+                  marks
+                  valueLabelDisplay="auto"
+                />
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant="h6" gutterBottom>
+            Task Preferences
+          </Typography>
+          <Paper sx={{ p: 2 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Default System Prompt"
+                  multiline
+                  rows={3}
+                  defaultValue="You are a helpful AI assistant..."
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={autoSave}
+                      onChange={(e) => setAutoSave(e.target.checked)}
+                    />
+                  }
+                  label="Auto-save responses"
+                />
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant="h6" gutterBottom>
+            Notifications
+          </Typography>
+          <Paper sx={{ p: 2 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={notifications}
+                      onChange={(e) => setNotifications(e.target.checked)}
+                    />
+                  }
+                  label="Enable notifications"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={emailNotifications}
+                      onChange={(e) => setEmailNotifications(e.target.checked)}
+                    />
+                  }
+                  label="Email notifications"
+                />
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant="h6" gutterBottom>
+            API Configuration
+          </Typography>
+          <Paper sx={{ p: 2 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="API Key"
+                  type="password"
+                  defaultValue="sk-..."
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="API Endpoint"
+                  defaultValue="https://api.openai.com/v1"
+                />
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+};
+
 const AgentDetails = ({ open, onClose, agent }) => {
   const theme = useTheme();
   const [tabValue, setTabValue] = React.useState(0);
@@ -338,9 +520,7 @@ const AgentDetails = ({ open, onClose, agent }) => {
           </TabPanel>
 
           <TabPanel value={tabValue} index={2}>
-            <Typography variant="body1" color="text.secondary">
-              Agent settings and configurations will be added here.
-            </Typography>
+            <SettingsPanel />
           </TabPanel>
         </DialogContent>
       </Box>
