@@ -53,12 +53,13 @@ const getStatusColor = (status) => {
   }
 };
 
+const MotionCard = motion.create(Card);
+
 const AgentCardSkeleton = () => {
   const theme = useTheme();
   
   return (
-    <Card
-      component={motion.div}
+    <MotionCard
       whileHover={{ y: -5, boxShadow: theme.shadows[8] }}
       sx={{ height: '100%', position: 'relative' }}
     >
@@ -77,7 +78,7 @@ const AgentCardSkeleton = () => {
           <Skeleton variant="rounded" width={60} height={24} />
         </Box>
       </CardContent>
-    </Card>
+    </MotionCard>
   );
 };
 
@@ -85,8 +86,7 @@ const AgentCard = ({ agent, onClick, selected }) => {
   const theme = useTheme();
   
   return (
-    <Card
-      component={motion.div}
+    <MotionCard
       whileHover={{ y: -5, boxShadow: theme.shadows[8] }}
       onClick={onClick}
       sx={{ 
@@ -171,7 +171,7 @@ const AgentCard = ({ agent, onClick, selected }) => {
           />
         </Box>
       </CardContent>
-    </Card>
+    </MotionCard>
   );
 };
 

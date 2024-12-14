@@ -59,7 +59,7 @@ const menuItems = [
   }
 ];
 
-const MotionListItem = motion(ListItem);
+const MotionListItem = motion.create(ListItem);
 
 const SidebarContent = () => {
   const theme = useTheme();
@@ -70,7 +70,12 @@ const SidebarContent = () => {
   };
 
   return (
-    <Box sx={{ py: 2 }}>
+    <Box sx={{ 
+      py: 2,
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
       {/* Logo/Brand */}
       <Box sx={{ px: 3, mb: 4 }}>
         <Typography 
@@ -95,15 +100,11 @@ const SidebarContent = () => {
       {/* Main Navigation */}
       <List>
         {menuItems.filter(item => item.section === 'main').map((item) => (
-          <MotionListItem 
-            key={item.path} 
-            disablePadding
-            whileHover={{ x: 10 }}
-            transition={{ type: "spring", stiffness: 400, damping: 20 }}
-          >
+          <ListItem key={item.path} disablePadding>
             <ListItemButton
               selected={selectedItem === item.path}
               onClick={() => handleItemClick(item.path)}
+              aria-label={item.title}
               sx={{
                 borderRadius: 1,
                 mx: 1,
@@ -131,7 +132,7 @@ const SidebarContent = () => {
                 }}
               />
             </ListItemButton>
-          </MotionListItem>
+          </ListItem>
         ))}
       </List>
 
@@ -140,15 +141,11 @@ const SidebarContent = () => {
       {/* Secondary Navigation */}
       <List>
         {menuItems.filter(item => item.section === 'secondary').map((item) => (
-          <MotionListItem 
-            key={item.path} 
-            disablePadding
-            whileHover={{ x: 10 }}
-            transition={{ type: "spring", stiffness: 400, damping: 20 }}
-          >
+          <ListItem key={item.path} disablePadding>
             <ListItemButton
               selected={selectedItem === item.path}
               onClick={() => handleItemClick(item.path)}
+              aria-label={item.title}
               sx={{
                 borderRadius: 1,
                 mx: 1,
@@ -176,7 +173,7 @@ const SidebarContent = () => {
                 }}
               />
             </ListItemButton>
-          </MotionListItem>
+          </ListItem>
         ))}
       </List>
     </Box>

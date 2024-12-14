@@ -14,7 +14,7 @@ const StatCard = ({ title, value, icon, color, isLoading }) => {
   
   return (
     <Paper
-      component={motion.div}
+      component={motion.create(Paper)}
       whileHover={{ y: -5, boxShadow: theme.shadows[8] }}
       transition={{ duration: 0.2 }}
       sx={{
@@ -29,7 +29,7 @@ const StatCard = ({ title, value, icon, color, isLoading }) => {
       }}
     >
       <Box
-        component={motion.div}
+        component={motion.create('div')}
         initial={{ scale: 0.5, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.1 }}
         sx={{
@@ -207,17 +207,18 @@ const Dashboard = () => {
     }
   ];
 
+  const MotionTypography = motion.create(Typography);
+
   return (
     <Box sx={{ py: 3 }}>
-      <Typography 
-        variant="h4" 
-        component={motion.h4}
+      <MotionTypography 
+        variant="h4"
         initial={{ x: -20, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         sx={{ mb: 4, fontWeight: 'bold' }}
       >
         AI Agents Dashboard
-      </Typography>
+      </MotionTypography>
 
       <Grid container spacing={3}>
         {statsConfig.map((stat, index) => (
@@ -227,7 +228,7 @@ const Dashboard = () => {
             sm={6} 
             md={3} 
             key={stat.title}
-            component={motion.div}
+            component={motion.create('div')}
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: index * 0.1 }}

@@ -17,13 +17,15 @@ const mockAgent = {
       task: 'Completed blog post on AI trends',
       status: 'completed',
       timestamp: '2 hours ago',
-      details: 'Generated a 1500-word article'
+      details: 'Generated a 1500-word article',
+      type: 'Content Generation'
     },
     { 
       task: 'Analyzing market research data',
       status: 'in_progress',
       timestamp: 'In progress',
-      details: 'Writing introduction'
+      details: 'Writing introduction',
+      type: 'Data Analysis'
     }
   ]
 };
@@ -64,10 +66,10 @@ describe('AgentDetails', () => {
     
     // Wait for metrics panel to be displayed
     await waitFor(() => {
-      expect(screen.getByText('Tasks Completed')).toBeInTheDocument();
-      expect(screen.getByText('127')).toBeInTheDocument();
+      expect(screen.getByText('Total Tasks')).toBeInTheDocument();
+      expect(screen.getByText('156')).toBeInTheDocument();
       expect(screen.getByText('Success Rate')).toBeInTheDocument();
-      expect(screen.getByText('98.5%')).toBeInTheDocument();
+      expect(screen.getByText('94%')).toBeInTheDocument();
     });
   });
 
@@ -81,8 +83,8 @@ describe('AgentDetails', () => {
     );
     
     await waitFor(() => {
-      expect(screen.getByText('Completed blog post on AI trends')).toBeInTheDocument();
-      expect(screen.getByText('Analyzing market research data')).toBeInTheDocument();
+      expect(screen.getByText('Content Generation')).toBeInTheDocument();
+      expect(screen.getByText('Data Analysis')).toBeInTheDocument();
     });
   });
 
@@ -225,5 +227,51 @@ describe('AgentDetails Settings Panel', () => {
     await user.clear(promptInput);
     await user.type(promptInput, 'Test system prompt');
     expect(promptInput).toHaveValue('Test system prompt');
+  });
+});
+
+describe('AgentDetails Communication Panel', () => {
+  it('displays communication panel when Communication tab is clicked', async () => {
+    const user = userEvent.setup();
+    renderWithTheme(<AgentDetails agent={mockAgent} open={true} onClose={() => {}} />);
+    
+    const communicationTab = screen.getByRole('tab', { name: /communication/i });
+    await user.click(communicationTab);
+    
+    expect(screen.getByPlaceholderText(/type a message or command/i)).toBeInTheDocument();
+  });
+
+  it('allows sending messages', async () => {
+    const user = userEvent.setup();
+    renderWithTheme(<AgentDetails agent={mockAgent} open={true} onClose={() => {}} />);
+    
+    // Navigate to communication tab
+    const communicationTab = screen.getByRole('tab', { name: /communication/i });
+    await user.click(communicationTab);
+    
+    // Type and send a message
+    const input = screen.getByPlaceholderText(/type a message or command/i);
+    await user.type(input, 'Hello agent');
+    const sendButton = screen.getByRole('button', { name: /send/i });
+    await user.click(sendButton);
+    
+    // Check if message appears in chat
+    expect(screen.getByText('Hello agent')).toBeInTheDocument();
+  });
+
+  it('sends message on Enter key press', async () => {
+    const user = userEvent.setup();
+    renderWithTheme(<AgentDetails agent={mockAgent} open={true} onClose={() => {}} />);
+    
+    // Navigate to communication tab
+    const communicationTab = screen.getByRole('tab', { name: /communication/i });
+    await user.click(communicationTab);
+    
+    // Type and send a message using Enter
+    const input = screen.getByPlaceholderText(/type a message or command/i);
+    await user.type(input, 'Hello agent{enter}');
+    
+    // Check if message appears in chat
+    expect(screen.getByText('Hello agent')).toBeInTheDocument();
   });
 });

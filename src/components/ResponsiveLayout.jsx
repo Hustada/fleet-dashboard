@@ -44,6 +44,9 @@ const dummyData = [
 const ResponsiveLayout = () => {
   const theme = useTheme();
 
+  const MotionDiv = motion.create('div');
+  const MotionPaper = motion.create(Paper);
+
   return (
     <Box sx={{ width: '100%' }}>
       <Typography 
@@ -61,8 +64,7 @@ const ResponsiveLayout = () => {
       <Grid container spacing={3}>
         {dummyData.map((mission, index) => (
           <Grid item xs={12} sm={6} lg={4} key={index}>
-            <Paper
-              component={motion.div}
+            <MotionPaper
               whileHover={{ scale: 1.02 }}
               elevation={3}
               sx={{
@@ -109,8 +111,7 @@ const ResponsiveLayout = () => {
                     overflow: 'hidden'
                   }}
                 >
-                  <Box
-                    component={motion.div}
+                  <MotionDiv
                     initial={{ width: 0 }}
                     animate={{ width: `${mission.progress}%` }}
                     transition={{ duration: 1, ease: "easeOut" }}
@@ -121,7 +122,7 @@ const ResponsiveLayout = () => {
                   />
                 </Box>
               </Box>
-            </Paper>
+            </MotionPaper>
           </Grid>
         ))}
       </Grid>

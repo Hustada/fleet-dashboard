@@ -1,19 +1,26 @@
 import React from 'react';
 import { Box, AppBar, Toolbar, Typography, IconButton, Drawer, useTheme, Avatar, Badge, useMediaQuery } from '@mui/material';
-import { Menu as MenuIcon, Notifications as NotificationsIcon, Close as CloseIcon } from '@mui/icons-material';
+import { Menu as MenuIcon, Notifications as NotificationsIcon, Close as CloseIcon, Chat as ChatIcon } from '@mui/icons-material';
 import SidebarContent from '../Navigation/SidebarContent';
+import ChatPanel from '../Chat/ChatPanel';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const DRAWER_WIDTH = 280;
+const CHAT_WIDTH = 320;
 const APPBAR_HEIGHT = 64;
 
 const MainLayout = ({ children }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [chatOpen, setChatOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const handleChatToggle = () => {
+    setChatOpen(!chatOpen);
   };
 
   const drawer = <SidebarContent />;
@@ -22,38 +29,38 @@ const MainLayout = ({ children }) => {
     <AnimatePresence>
       {mobileOpen && (
         <>
-          <Box
-            component={motion.div}
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.5 }}
             exit={{ opacity: 0 }}
             onClick={handleDrawerToggle}
-            sx={{
+            aria-label="close drawer"
+            role="presentation"
+            style={{
               position: 'fixed',
               top: 0,
               left: 0,
               right: 0,
               bottom: 0,
-              bgcolor: 'black',
-              zIndex: 9998
+              width: '100vw',
+              height: '100vh',
+              backgroundColor: 'black',
+              zIndex: theme.zIndex.drawer - 1
             }}
           />
-          <Box
-            component={motion.div}
+          <motion.div
             initial={{ x: '-100%' }}
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            sx={{
+            style={{
               position: 'fixed',
               top: 0,
               left: 0,
-              bottom: 0,
               width: '100vw',
               height: '100vh',
-              overflowY: 'auto',
-              bgcolor: 'background.darker',
-              zIndex: 9999,
+              backgroundColor: theme.palette.background.darker,
+              zIndex: theme.zIndex.drawer,
               display: 'flex',
               flexDirection: 'column'
             }}
@@ -78,7 +85,7 @@ const MainLayout = ({ children }) => {
             <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
               {drawer}
             </Box>
-          </Box>
+          </motion.div>
         </>
       )}
     </AnimatePresence>
@@ -114,6 +121,15 @@ const MainLayout = ({ children }) => {
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <IconButton
+              color="inherit"
+              aria-label="toggle chat"
+              onClick={handleChatToggle}
+              sx={{ mr: 1 }}
+              data-testid="chat-toggle"
+            >
+              <ChatIcon data-testid="chat-button" />
+            </IconButton>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="error">
                 <NotificationsIcon />
@@ -160,6 +176,68 @@ const MainLayout = ({ children }) => {
           </Drawer>
         )}
       </Box>
+
+      {/* Chat Panel */}
+      <Drawer
+        anchor="right"
+        open={chatOpen}
+        onClose={handleChatToggle}
+        variant="temporary"
+        keepMounted={false}
+        ModalProps={{
+          BackdropProps: {
+            'aria-label': 'close chat'
+          }
+        }}
+        sx={{
+          width: { xs: '100%', sm: CHAT_WIDTH },
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: { xs: '100%', sm: CHAT_WIDTH },
+            boxSizing: 'border-box',
+            bgcolor: 'background.darker',
+            borderLeft: { xs: 'none', sm: `1px solid ${theme.palette.divider}` },
+          },
+        }}
+      >
+        {chatOpen && (
+          <ChatPanel 
+            onClose={handleChatToggle}
+            agents={[
+              {
+                id: '1',
+                name: 'Content Writer',
+                role: 'Writer',
+                status: 'Active',
+              },
+              {
+                id: '2',
+                name: 'Code Assistant',
+                role: 'Coder',
+                status: 'Busy',
+              },
+              {
+                id: '3',
+                name: 'Data Analyst',
+                role: 'Analyst',
+                status: 'Idle',
+              },
+              {
+                id: '4',
+                name: 'UI Designer',
+                role: 'Designer',
+                status: 'Active',
+              },
+              {
+                id: '5',
+                name: 'Research Agent',
+                role: 'Researcher',
+                status: 'Active',
+              }
+            ]}
+          />
+        )}
+      </Drawer>
 
       {/* Main content */}
       <Box

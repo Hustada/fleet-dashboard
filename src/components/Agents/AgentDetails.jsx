@@ -43,6 +43,7 @@ import {
   Analytics as AnalystIcon,
   Brush as DesignerIcon,
   Psychology as ResearcherIcon,
+  Send as SendIcon,
 } from '@mui/icons-material';
 
 const TabPanel = ({ children, value, index, ...other }) => (
@@ -187,6 +188,36 @@ ActivityTimeline.propTypes = {
       metrics: PropTypes.object,
     })
   ).isRequired,
+};
+
+const MetricsPanel = ({ metrics }) => {
+  const theme = useTheme();
+  return (
+    <Grid container spacing={2}>
+      {Object.entries(metrics).map(([key, value]) => (
+        <Grid item xs={12} sm={6} key={key}>
+          <Paper
+            sx={{
+              p: 2,
+              bgcolor: 'background.paper',
+              border: `1px solid ${theme.palette.divider}`
+            }}
+          >
+            <Typography variant="subtitle2" color="text.secondary">
+              {key}
+            </Typography>
+            <Typography variant="h4" color="text.primary" sx={{ mt: 1 }}>
+              {value}
+            </Typography>
+          </Paper>
+        </Grid>
+      ))}
+    </Grid>
+  );
+};
+
+MetricsPanel.propTypes = {
+  metrics: PropTypes.object.isRequired,
 };
 
 const SettingsPanel = () => {
@@ -362,186 +393,195 @@ const SettingsPanel = () => {
   );
 };
 
-const AgentDetails = ({ open, onClose, agent }) => {
-  const theme = useTheme();
-  const [tabValue, setTabValue] = React.useState(0);
+const AgentDetails = ({ open = false, onClose = () => {}, agent = null }) => {
+  // If no agent is selected, don't render the dialog
+  if (!agent) return null;
+
+  const [activeTab, setActiveTab] = React.useState(0);
+  const [messages, setMessages] = React.useState([]);
+  const [newMessage, setNewMessage] = React.useState('');
 
   const handleTabChange = (event, newValue) => {
-    setTabValue(newValue);
+    setActiveTab(newValue);
+  };
+
+  const handleSendMessage = () => {
+    if (newMessage.trim()) {
+      setMessages([
+        ...messages,
+        {
+          id: Date.now(),
+          content: newMessage,
+          sender: 'user',
+          timestamp: new Date(),
+          status: 'sent'
+        }
+      ]);
+      setNewMessage('');
+    }
   };
 
   // Dummy data for demonstration
   const activities = [
     {
-      task: 'Completed blog post on AI trends',
+      task: 'Content Generation',
       status: 'completed',
-      timestamp: '2 hours ago',
-      details: 'Generated a 1500-word article with 5 key insights',
-      metrics: {
-        'Words': '1,500',
-        'Time': '45m',
-        'Quality': '98%'
-      }
+      timestamp: '2023-12-14T10:30:00',
     },
     {
-      task: 'Analyzing market research data',
+      task: 'Data Analysis',
       status: 'in_progress',
-      timestamp: 'In progress',
-      details: 'Processing survey responses and generating insights',
-      metrics: {
-        'Progress': '65%',
-        'ETA': '30m'
-      }
+      timestamp: '2023-12-14T11:00:00',
     },
-    {
-      task: 'Social media post generation',
-      status: 'scheduled',
-      timestamp: 'Scheduled for 2PM',
-      details: 'Will create 5 posts based on the latest blog'
-    },
-    {
-      task: 'Email newsletter draft',
-      status: 'failed',
-      timestamp: '5 hours ago',
-      details: 'Failed due to API rate limit. Retrying in 1 hour.'
-    }
   ];
 
   const metrics = {
-    'Tasks Completed': '127',
-    'Success Rate': '98.5%',
-    'Avg. Response Time': '1.2s',
-    'Accuracy Score': '99.1%'
+    'Total Tasks': '156',
+    'Success Rate': '94%',
+    'Response Time': '1.2s',
+    'Uptime': '99.9%',
   };
-
-  if (!agent) return null;
 
   return (
     <Dialog
-      fullWidth
-      maxWidth="md"
       open={open}
       onClose={onClose}
+      maxWidth="md"
+      fullWidth
       sx={{
         '& .MuiDialog-paper': {
           bgcolor: 'background.default',
         }
       }}
     >
-      <Box sx={{ 
-        position: 'relative',
-        bgcolor: 'background.default',
-        backgroundImage: `linear-gradient(45deg, ${theme.palette.background.paper}, ${theme.palette.background.default})`
-      }}>
+      <Box sx={{ p: 2 }}>
         <IconButton
           onClick={onClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: 'text.secondary'
-          }}
+          sx={{ position: 'absolute', right: 8, top: 8 }}
         >
           <CloseIcon />
         </IconButton>
-
-        <Box sx={{ p: 3, pb: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-            <Avatar
-              sx={{
-                bgcolor: theme.palette.primary.main,
-                width: 64,
-                height: 64
-              }}
-            >
-              {agent.role === 'Writer' && <WriterIcon />}
-              {agent.role === 'Coder' && <CoderIcon />}
-              {agent.role === 'Analyst' && <AnalystIcon />}
-              {agent.role === 'Designer' && <DesignerIcon />}
-              {agent.role === 'Researcher' && <ResearcherIcon />}
+        <Box sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ mr: 2 }}>
+            <Avatar sx={{ bgcolor: 'primary.main' }}>
+              {agent.role === 'Writer' ? <WriterIcon /> :
+               agent.role === 'Coder' ? <CoderIcon /> :
+               agent.role === 'Analyst' ? <AnalystIcon /> :
+               agent.role === 'Designer' ? <DesignerIcon /> :
+               <ResearcherIcon />}
             </Avatar>
-            <Box>
-              <Typography variant="h5" color="text.primary">
-                {agent.name}
-              </Typography>
-              <Typography variant="subtitle1" color="text.secondary">
-                {agent.role}
-              </Typography>
-            </Box>
           </Box>
-
-          <Tabs
-            value={tabValue}
-            onChange={handleTabChange}
-            sx={{
-              borderBottom: 1,
-              borderColor: 'divider',
-              '& .MuiTab-root': {
-                minWidth: 100,
-                color: 'text.secondary',
-                '&.Mui-selected': {
-                  color: 'primary.main'
-                }
-              }
-            }}
-          >
-            <Tab label="Activities" />
-            <Tab label="Metrics" />
-            <Tab label="Settings" />
-          </Tabs>
+          <Box>
+            <Typography variant="h5">{agent.name}</Typography>
+            <Typography variant="subtitle1" sx={{ textTransform: 'capitalize' }}>
+              {agent.role}
+            </Typography>
+          </Box>
         </Box>
 
-        <DialogContent>
-          <TabPanel value={tabValue} index={0}>
-            <ActivityTimeline activities={activities} />
-          </TabPanel>
+        <Tabs value={activeTab} onChange={handleTabChange}>
+          <Tab label="Activities" />
+          <Tab label="Metrics" />
+          <Tab label="Communication" />
+          <Tab label="Settings" />
+        </Tabs>
 
-          <TabPanel value={tabValue} index={1}>
-            <Grid container spacing={2}>
-              {Object.entries(metrics).map(([key, value]) => (
-                <Grid item xs={12} sm={6} key={key}>
+        <TabPanel value={activeTab} index={0}>
+          <ActivityTimeline activities={activities} />
+        </TabPanel>
+
+        <TabPanel value={activeTab} index={1}>
+          <MetricsPanel metrics={metrics} />
+        </TabPanel>
+
+        <TabPanel value={activeTab} index={2}>
+          <Box sx={{ height: '400px', display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ flexGrow: 1, overflow: 'auto', mb: 2 }}>
+              {messages.map((message) => (
+                <Box
+                  key={message.id}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: message.sender === 'user' ? 'flex-end' : 'flex-start',
+                    mb: 1,
+                  }}
+                >
                   <Paper
                     sx={{
                       p: 2,
-                      bgcolor: 'background.paper',
-                      border: `1px solid ${theme.palette.divider}`
+                      maxWidth: '70%',
+                      bgcolor: message.sender === 'user' ? 'primary.main' : 'background.paper',
+                      color: message.sender === 'user' ? 'primary.contrastText' : 'text.primary',
                     }}
                   >
-                    <Typography variant="subtitle2" color="text.secondary">
-                      {key}
-                    </Typography>
-                    <Typography variant="h4" color="text.primary" sx={{ mt: 1 }}>
-                      {value}
+                    <Typography variant="body1">{message.content}</Typography>
+                    <Typography variant="caption" sx={{ display: 'block', mt: 0.5, opacity: 0.7 }}>
+                      {new Date(message.timestamp).toLocaleTimeString()}
                     </Typography>
                   </Paper>
-                </Grid>
+                </Box>
               ))}
-            </Grid>
-          </TabPanel>
+            </Box>
+            <Paper
+              sx={{
+                p: 2,
+                mt: 'auto',
+                bgcolor: 'background.paper',
+              }}
+              elevation={3}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs>
+                  <TextField
+                    fullWidth
+                    placeholder="Type a message or command..."
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendMessage();
+                      }
+                    }}
+                    multiline
+                    maxRows={4}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item>
+                  <IconButton
+                    color="primary"
+                    onClick={handleSendMessage}
+                    aria-label="send message"
+                    disabled={!newMessage.trim()}
+                    sx={{ height: '100%' }}
+                  >
+                    <SendIcon />
+                  </IconButton>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Box>
+        </TabPanel>
 
-          <TabPanel value={tabValue} index={2}>
-            <SettingsPanel />
-          </TabPanel>
-        </DialogContent>
+        <TabPanel value={activeTab} index={3}>
+          <SettingsPanel />
+        </TabPanel>
       </Box>
     </Dialog>
   );
 };
 
 AgentDetails.propTypes = {
-  open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool,
+  onClose: PropTypes.func,
   agent: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    role: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
-    currentTask: PropTypes.string,
-    progress: PropTypes.number,
-    tasksCompleted: PropTypes.number,
-    activities: PropTypes.array.isRequired,
+    id: PropTypes.string,
+    name: PropTypes.string,
+    role: PropTypes.string,
+    status: PropTypes.string,
     metrics: PropTypes.object,
-  }).isRequired,
+  }),
 };
 
 export default AgentDetails;
