@@ -9,10 +9,11 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Drawer
 } from '@mui/material';
 import { Send as SendIcon, Close as CloseIcon } from '@mui/icons-material';
 
-const ChatPanel = ({ agents, onClose }) => {
+const ChatPanel = ({ agents, open, onClose }) => {
   const [selectedAgent, setSelectedAgent] = useState('');
   const [messageInput, setMessageInput] = useState('');
   const [messages, setMessages] = useState([]);
@@ -50,100 +51,168 @@ const ChatPanel = ({ agents, onClose }) => {
   };
 
   return (
-    <Box sx={{ 
-      height: '100%', 
-      display: 'flex', 
-      flexDirection: 'column',
-      bgcolor: 'background.default',
-      p: 2 
-    }}>
-      {/* Header with Close Button */}
-      <Box sx={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center',
-        mb: 2
-      }}>
-        <Typography variant="h6">Chat</Typography>
-        <IconButton onClick={onClose} edge="end" aria-label="close">
-          <CloseIcon />
-        </IconButton>
-      </Box>
+    <Drawer
+      anchor="right"
+      open={open}
+      onClose={onClose}
+      ModalProps={{
+        keepMounted: true,
+        disablePortal: true,
+        slotProps: {
+          backdrop: {
+            'aria-hidden': false
+          }
+        }
+      }}
+      PaperProps={{
+        sx: {
+          width: {
+            xs: '100%',
+            sm: 400
+          },
+          bgcolor: 'background.paper'
+        }
+      }}
+      sx={{
+        '& .MuiDrawer-paper': {
+          boxSizing: 'border-box'
+        }
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          p: 2
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Typography variant="h6">Chat</Typography>
+          <IconButton onClick={onClose} size="small">
+            <CloseIcon />
+          </IconButton>
+        </Box>
 
-      {/* Agent Selector */}
-      <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel id="agent-select-label">Select Agent</InputLabel>
-        <Select
-          labelId="agent-select-label"
-          id="agent-select"
-          value={selectedAgent}
-          onChange={handleAgentChange}
-          label="Select Agent"
-        >
-          {agents.map((agent) => (
-            <MenuItem key={agent.id} value={agent.id}>
-              {agent.name} ({agent.role})
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-
-      {/* Messages Area */}
-      <Box sx={{ 
-        flex: 1, 
-        overflow: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 1,
-        mb: 2
-      }}>
-        {messages.map((message) => (
-          <Box
-            key={message.id}
+        {/* Agent Selector */}
+        <FormControl fullWidth sx={{ mb: 2 }}>
+          <InputLabel id="agent-select-label">Select Agent</InputLabel>
+          <Select
+            labelId="agent-select-label"
+            id="agent-select"
+            value={selectedAgent}
+            onChange={handleAgentChange}
+            displayEmpty
+            renderValue={(selected) => {
+              if (!selected) return "Select an agent";
+              const agent = agents.find(a => a.id === selected);
+              return agent ? agent.name : "Select an agent";
+            }}
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  bgcolor: 'background.paper',
+                  '& .MuiMenuItem-root': {
+                    bgcolor: 'background.paper',
+                    '&:hover': {
+                      bgcolor: 'action.hover'
+                    }
+                  }
+                }
+              },
+              keepMounted: true,
+              disablePortal: true,
+              slotProps: {
+                paper: {
+                  'aria-hidden': false
+                }
+              }
+            }}
             sx={{
-              display: 'flex',
-              justifyContent: message.sender === 'user' ? 'flex-end' : 'flex-start',
+              width: '100%',
+              bgcolor: 'background.paper',
+              '& .MuiSelect-select': {
+                bgcolor: 'background.paper'
+              }
             }}
           >
-            <Paper
+            <MenuItem value="">
+              <em>Select an agent</em>
+            </MenuItem>
+            {agents.map((agent) => (
+              <MenuItem 
+                key={agent.id} 
+                value={agent.id}
+                sx={{
+                  bgcolor: 'background.paper',
+                  '&:hover': {
+                    bgcolor: 'action.hover'
+                  }
+                }}
+              >
+                {agent.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        {/* Messages Area */}
+        <Box sx={{ 
+          flex: 1, 
+          overflow: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 1,
+          mb: 2
+        }}>
+          {messages.map((message) => (
+            <Box
+              key={message.id}
               sx={{
-                p: 1.5,
-                maxWidth: '70%',
-                bgcolor: message.sender === 'user' ? 'primary.main' : 'background.paper',
-                color: message.sender === 'user' ? 'primary.contrastText' : 'text.primary',
+                display: 'flex',
+                justifyContent: message.sender === 'user' ? 'flex-end' : 'flex-start',
               }}
             >
-              <Typography variant="body1">{message.text}</Typography>
-              <Typography variant="caption" color={message.sender === 'user' ? 'primary.contrastText' : 'text.secondary'}>
-                {new Date(message.timestamp).toLocaleTimeString()}
-              </Typography>
-            </Paper>
-          </Box>
-        ))}
-      </Box>
+              <Paper
+                sx={{
+                  p: 1.5,
+                  maxWidth: '70%',
+                  bgcolor: message.sender === 'user' ? 'primary.main' : 'background.paper',
+                  color: message.sender === 'user' ? 'primary.contrastText' : 'text.primary',
+                }}
+              >
+                <Typography variant="body1">{message.text}</Typography>
+                <Typography variant="caption" color={message.sender === 'user' ? 'primary.contrastText' : 'text.secondary'}>
+                  {new Date(message.timestamp).toLocaleTimeString()}
+                </Typography>
+              </Paper>
+            </Box>
+          ))}
+        </Box>
 
-      {/* Input Area */}
-      <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-end' }}>
-        <TextField
-          fullWidth
-          multiline
-          maxRows={4}
-          value={messageInput}
-          onChange={(e) => setMessageInput(e.target.value)}
-          placeholder={selectedAgent ? 'Type a message...' : 'Select an agent to start chatting'}
-          disabled={!selectedAgent}
-          sx={{ flexGrow: 1 }}
-        />
-        <IconButton
-          color="primary"
-          onClick={handleSendMessage}
-          disabled={!selectedAgent || !messageInput.trim()}
-          aria-label="send message"
-        >
-          <SendIcon />
-        </IconButton>
+        {/* Input Area */}
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-end' }}>
+          <TextField
+            fullWidth
+            multiline
+            maxRows={4}
+            value={messageInput}
+            onChange={(e) => setMessageInput(e.target.value)}
+            placeholder={selectedAgent ? 'Type a message...' : 'Select an agent to start chatting'}
+            disabled={!selectedAgent}
+            sx={{ flexGrow: 1 }}
+          />
+          <IconButton
+            color="primary"
+            onClick={handleSendMessage}
+            disabled={!selectedAgent || !messageInput.trim()}
+            aria-label="send message"
+          >
+            <SendIcon />
+          </IconButton>
+        </Box>
       </Box>
-    </Box>
+    </Drawer>
   );
 };
 

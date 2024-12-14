@@ -178,66 +178,37 @@ const MainLayout = ({ children }) => {
       </Box>
 
       {/* Chat Panel */}
-      <Drawer
-        anchor="right"
+      <ChatPanel
         open={chatOpen}
         onClose={handleChatToggle}
-        variant="temporary"
-        keepMounted={false}
-        ModalProps={{
-          BackdropProps: {
-            'aria-label': 'close chat'
-          }
-        }}
-        sx={{
-          width: { xs: '100%', sm: CHAT_WIDTH },
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: { xs: '100%', sm: CHAT_WIDTH },
-            boxSizing: 'border-box',
-            bgcolor: 'background.darker',
-            borderLeft: { xs: 'none', sm: `1px solid ${theme.palette.divider}` },
+        agents={[
+          {
+            id: '1',
+            name: 'Content Writer',
+            role: 'Writer'
           },
-        }}
-      >
-        {chatOpen && (
-          <ChatPanel 
-            onClose={handleChatToggle}
-            agents={[
-              {
-                id: '1',
-                name: 'Content Writer',
-                role: 'Writer',
-                status: 'Active',
-              },
-              {
-                id: '2',
-                name: 'Code Assistant',
-                role: 'Coder',
-                status: 'Busy',
-              },
-              {
-                id: '3',
-                name: 'Data Analyst',
-                role: 'Analyst',
-                status: 'Idle',
-              },
-              {
-                id: '4',
-                name: 'UI Designer',
-                role: 'Designer',
-                status: 'Active',
-              },
-              {
-                id: '5',
-                name: 'Research Agent',
-                role: 'Researcher',
-                status: 'Active',
-              }
-            ]}
-          />
-        )}
-      </Drawer>
+          {
+            id: '2',
+            name: 'Code Assistant',
+            role: 'Coder'
+          },
+          {
+            id: '3',
+            name: 'Data Analyst',
+            role: 'Analyst'
+          },
+          {
+            id: '4',
+            name: 'UI Designer',
+            role: 'Designer'
+          },
+          {
+            id: '5',
+            name: 'Research Agent',
+            role: 'Researcher'
+          }
+        ]}
+      />
 
       {/* Main content */}
       <Box

@@ -11,15 +11,23 @@ import {
   Chip,
   useTheme,
   Skeleton,
+  IconButton,
+  Menu,
+  MenuItem,
+  useMediaQuery,
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import {
-  SmartToy as AgentIcon,
   Edit as WriterIcon,
   Code as CoderIcon,
   Analytics as AnalystIcon,
   Brush as DesignerIcon,
   Psychology as ResearcherIcon,
+  MoreVert as MoreIcon,
+  Chat as ChatIcon,
+  Settings as SettingsIcon,
+  Info as InfoIcon,
+  SmartToy as AgentIcon,
 } from '@mui/icons-material';
 import AgentDetails from './AgentDetails';
 
@@ -82,100 +90,136 @@ const AgentCardSkeleton = () => {
   );
 };
 
-const AgentCard = ({ agent, onClick, selected }) => {
+const AgentCard = ({ agent, onClick, onAction }) => {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [menuAnchor, setMenuAnchor] = React.useState(null);
   
+  const handleClick = () => {
+    onClick?.(agent);
+  };
+
+  const handleMenuClick = (event) => {
+    event.stopPropagation();
+    setMenuAnchor(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setMenuAnchor(null);
+  };
+
+  const handleAction = (action) => () => {
+    handleMenuClose();
+    onAction?.(action, agent);
+  };
+
   return (
-    <MotionCard
-      whileHover={{ y: -5, boxShadow: theme.shadows[8] }}
-      onClick={onClick}
-      sx={{ 
-        height: '100%', 
-        position: 'relative',
+    <Card
+      onClick={handleClick}
+      sx={{
+        height: '100%',
         cursor: 'pointer',
-        background: `linear-gradient(45deg, ${theme.palette.background.paper}, ${theme.palette.background.default})`,
-        border: `1px solid ${theme.palette.divider}`,
-        '&.Mui-selected': {
-          borderColor: theme.palette.primary.main,
-          boxShadow: `0 0 0 2px ${theme.palette.primary.main}`,
-        }
+        position: 'relative',
+        '&:hover': {
+          bgcolor: 'action.hover',
+        },
       }}
-      className={selected ? 'Mui-selected' : ''}
     >
       <CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-          <Avatar
-            sx={{ 
-              mr: 2,
-              background: `linear-gradient(45deg, ${theme.palette.primary.main}22, ${theme.palette.primary.main}44)`,
-              border: `1px solid ${theme.palette.primary.main}33`,
-            }}
-          >
-            {getRoleIcon(agent.role)}
-          </Avatar>
-          <Box sx={{ flex: 1 }}>
-            <Typography variant="h6" component="div">
-              {agent.name}
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Avatar sx={{ bgcolor: 'primary.main' }}>
+              {agent.role === 'Writer' && <WriterIcon />}
+              {agent.role === 'Coder' && <CoderIcon />}
+              {agent.role === 'Analyst' && <AnalystIcon />}
+              {agent.role === 'Designer' && <DesignerIcon />}
+              {agent.role === 'Researcher' && <ResearcherIcon />}
+            </Avatar>
+            <Box>
+              <Typography variant="h6" component="div">
+                {agent.name}
+              </Typography>
               <Typography variant="body2" color="text.secondary">
                 {agent.role}
               </Typography>
-              <Chip 
-                label={agent.status} 
-                size="small" 
-                color={getStatusColor(agent.status)}
-                sx={{ height: 20 }}
-              />
             </Box>
           </Box>
+
+          <IconButton
+            size="small"
+            onClick={handleMenuClick}
+            sx={{ ml: 1 }}
+          >
+            <MoreIcon />
+          </IconButton>
+          <Menu
+            anchorEl={menuAnchor}
+            open={Boolean(menuAnchor)}
+            onClose={handleMenuClose}
+            onClick={(e) => e.stopPropagation()}
+            PaperProps={{
+              sx: {
+                bgcolor: 'background.paper',
+                '& .MuiMenuItem-root': {
+                  bgcolor: 'background.paper',
+                  '&:hover': {
+                    bgcolor: 'action.hover'
+                  }
+                }
+              }
+            }}
+          >
+            <MenuItem onClick={handleAction('message')}>
+              <ChatIcon sx={{ mr: 1 }} fontSize="small" />
+              Message
+            </MenuItem>
+            {isMobile && (
+              <MenuItem onClick={handleAction('details')}>
+                <InfoIcon sx={{ mr: 1 }} fontSize="small" />
+                View Details
+              </MenuItem>
+            )}
+            <MenuItem onClick={handleAction('settings')}>
+              <SettingsIcon sx={{ mr: 1 }} fontSize="small" />
+              Settings
+            </MenuItem>
+          </Menu>
         </Box>
 
-        {agent.currentTask ? (
-          <>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-              {agent.currentTask}
-            </Typography>
-            <LinearProgress 
-              variant="determinate" 
-              value={agent.progress} 
-              sx={{ 
-                mb: 2,
-                height: 4,
-                borderRadius: 2,
-                bgcolor: `${theme.palette.primary.main}22`,
-                '& .MuiLinearProgress-bar': {
-                  bgcolor: theme.palette.primary.main,
-                }
-              }} 
-            />
-          </>
-        ) : (
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            No active task
-          </Typography>
-        )}
-
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="body2" color="text.secondary">
-            Tasks Completed
-          </Typography>
-          <Chip 
-            label={agent.tasksCompleted} 
+        <Box sx={{ mt: 2 }}>
+          <Chip
+            label={agent.status}
             size="small"
-            sx={{ 
-              background: `linear-gradient(45deg, ${theme.palette.primary.main}22, ${theme.palette.primary.main}44)`,
-              border: `1px solid ${theme.palette.primary.main}33`,
-              color: theme.palette.primary.main,
+            sx={{
+              bgcolor: getStatusColor(agent.status),
+              color: 'common.white',
             }}
           />
         </Box>
+
+        {agent.currentTask && (
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Current Task
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              {agent.currentTask}
+            </Typography>
+            {agent.progress !== undefined && (
+              <LinearProgress
+                variant="determinate"
+                value={agent.progress}
+                sx={{ mt: 1 }}
+              />
+            )}
+          </Box>
+        )}
       </CardContent>
-    </MotionCard>
+    </Card>
   );
 };
 
-const AgentList = ({ agents, isLoading = false }) => {
+const AgentList = ({ agents, isLoading = false, onAction }) => {
   const [selectedAgentId, setSelectedAgentId] = React.useState(null);
   const [showDetails, setShowDetails] = React.useState(false);
 
@@ -208,7 +252,7 @@ const AgentList = ({ agents, isLoading = false }) => {
             <AgentCard 
               agent={agent} 
               onClick={() => handleAgentClick(agent)}
-              selected={selectedAgentId === agent.id}
+              onAction={onAction}
             />
           </Grid>
         ))}
@@ -230,10 +274,9 @@ AgentCard.propTypes = {
     status: PropTypes.string.isRequired,
     currentTask: PropTypes.string,
     progress: PropTypes.number,
-    tasksCompleted: PropTypes.number,
   }).isRequired,
-  onClick: PropTypes.func.isRequired,
-  selected: PropTypes.bool,
+  onClick: PropTypes.func,
+  onAction: PropTypes.func,
 };
 
 AgentList.propTypes = {
@@ -251,6 +294,7 @@ AgentList.propTypes = {
     })
   ).isRequired,
   isLoading: PropTypes.bool,
+  onAction: PropTypes.func,
 };
 
 export default AgentList;
