@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Dialog,
   DialogContent,
@@ -167,6 +168,18 @@ const ActivityTimeline = ({ activities }) => {
   );
 };
 
+ActivityTimeline.propTypes = {
+  activities: PropTypes.arrayOf(
+    PropTypes.shape({
+      task: PropTypes.string.isRequired,
+      status: PropTypes.string.isRequired,
+      timestamp: PropTypes.string.isRequired,
+      details: PropTypes.string,
+      metrics: PropTypes.object,
+    })
+  ).isRequired,
+};
+
 const AgentDetails = ({ open, onClose, agent }) => {
   const theme = useTheme();
   const [tabValue, setTabValue] = React.useState(0);
@@ -333,6 +346,22 @@ const AgentDetails = ({ open, onClose, agent }) => {
       </Box>
     </Dialog>
   );
+};
+
+AgentDetails.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  agent: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired,
+    currentTask: PropTypes.string,
+    progress: PropTypes.number,
+    tasksCompleted: PropTypes.number,
+    activities: PropTypes.array.isRequired,
+    metrics: PropTypes.object,
+  }).isRequired,
 };
 
 export default AgentDetails;
