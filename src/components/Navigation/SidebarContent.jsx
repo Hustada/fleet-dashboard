@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import {
   List,
   ListItem,
@@ -59,14 +60,56 @@ const menuItems = [
   }
 ];
 
-const MotionListItem = motion.create(ListItem);
-
 const SidebarContent = () => {
   const theme = useTheme();
-  const [selectedItem, setSelectedItem] = React.useState('/');
+  const location = useLocation();
 
-  const handleItemClick = (path) => {
-    setSelectedItem(path);
+  const renderMenuSection = (section) => {
+    return menuItems
+      .filter(item => item.section === section)
+      .map((item) => (
+        <ListItem 
+          key={item.title} 
+          disablePadding 
+          sx={{ display: 'block' }}
+          component={Link}
+          to={item.path}
+        >
+          <ListItemButton
+            selected={location.pathname === item.path}
+            sx={{
+              minHeight: 48,
+              px: 2.5,
+              borderRadius: 1,
+              mx: 1,
+              '&.Mui-selected': {
+                backgroundColor: 'rgba(79, 195, 247, 0.08)',
+                '&:hover': {
+                  backgroundColor: 'rgba(79, 195, 247, 0.12)',
+                },
+              }
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 40,
+                color: location.pathname === item.path ? 'primary.main' : 'text.secondary'
+              }}
+            >
+              {item.icon}
+            </ListItemIcon>
+            <ListItemText 
+              primary={item.title}
+              primaryTypographyProps={{
+                sx: { 
+                  color: location.pathname === item.path ? 'primary.main' : 'text.primary',
+                  fontWeight: location.pathname === item.path ? 'medium' : 'regular'
+                }
+              }}
+            />
+          </ListItemButton>
+        </ListItem>
+      ));
   };
 
   return (
@@ -76,105 +119,33 @@ const SidebarContent = () => {
       display: 'flex',
       flexDirection: 'column'
     }}>
-      {/* Logo/Brand */}
       <Box sx={{ px: 3, mb: 4 }}>
-        <Typography 
-          variant="h6" 
-          component={motion.div}
-          animate={{
-            opacity: [1, 0.8, 1],
-          }}
-          transition={{ duration: 4, repeat: Infinity }}
-          sx={{ 
-            color: 'primary.main',
-            fontWeight: 'bold',
-            letterSpacing: '0.05em'
-          }}
+        <motion.div
+          initial={{ x: -20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.2 }}
         >
-          DASHBOARD
-        </Typography>
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              color: 'primary.main',
+              fontWeight: 'bold',
+              letterSpacing: '0.05em'
+            }}
+          >
+            DASHBOARD
+          </Typography>
+        </motion.div>
       </Box>
 
-      <Divider sx={{ mb: 2 }} />
-
-      {/* Main Navigation */}
-      <List>
-        {menuItems.filter(item => item.section === 'main').map((item) => (
-          <ListItem key={item.path} disablePadding>
-            <ListItemButton
-              selected={selectedItem === item.path}
-              onClick={() => handleItemClick(item.path)}
-              aria-label={item.title}
-              sx={{
-                borderRadius: 1,
-                mx: 1,
-                '&.Mui-selected': {
-                  backgroundColor: 'rgba(79, 195, 247, 0.08)',
-                  '&:hover': {
-                    backgroundColor: 'rgba(79, 195, 247, 0.12)',
-                  },
-                },
-              }}
-            >
-              <ListItemIcon sx={{ 
-                color: selectedItem === item.path ? 'primary.main' : 'text.secondary',
-                minWidth: 40
-              }}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText 
-                primary={item.title}
-                primaryTypographyProps={{
-                  sx: { 
-                    color: selectedItem === item.path ? 'primary.main' : 'text.primary',
-                    fontWeight: selectedItem === item.path ? 'medium' : 'regular'
-                  }
-                }}
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
+      <List component="nav" sx={{ px: 2 }}>
+        {renderMenuSection('main')}
       </List>
 
       <Divider sx={{ my: 2 }} />
 
-      {/* Secondary Navigation */}
-      <List>
-        {menuItems.filter(item => item.section === 'secondary').map((item) => (
-          <ListItem key={item.path} disablePadding>
-            <ListItemButton
-              selected={selectedItem === item.path}
-              onClick={() => handleItemClick(item.path)}
-              aria-label={item.title}
-              sx={{
-                borderRadius: 1,
-                mx: 1,
-                '&.Mui-selected': {
-                  backgroundColor: 'rgba(79, 195, 247, 0.08)',
-                  '&:hover': {
-                    backgroundColor: 'rgba(79, 195, 247, 0.12)',
-                  },
-                },
-              }}
-            >
-              <ListItemIcon sx={{ 
-                color: selectedItem === item.path ? 'primary.main' : 'text.secondary',
-                minWidth: 40
-              }}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText 
-                primary={item.title}
-                primaryTypographyProps={{
-                  sx: { 
-                    color: selectedItem === item.path ? 'primary.main' : 'text.primary',
-                    fontWeight: selectedItem === item.path ? 'medium' : 'regular'
-                  }
-                }}
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
+      <List component="nav" sx={{ px: 2 }}>
+        {renderMenuSection('secondary')}
       </List>
     </Box>
   );

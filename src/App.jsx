@@ -1,8 +1,10 @@
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import getTheme from './theme';
 import MainLayout from './components/Layout/MainLayout';
 import Dashboard from './components/Dashboard/Dashboard';
+import Analytics from './components/Analytics/Analytics';
 import { ThemeProvider, useThemeMode } from './contexts/ThemeContext';
 
 const ThemedApp = () => {
@@ -12,9 +14,14 @@ const ThemedApp = () => {
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
-      <MainLayout>
-        <Dashboard />
-      </MainLayout>
+      <BrowserRouter>
+        <MainLayout>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/analytics" element={<Analytics />} />
+          </Routes>
+        </MainLayout>
+      </BrowserRouter>
     </MuiThemeProvider>
   );
 };
