@@ -9,7 +9,8 @@ import {
   Box,
   Typography,
   useTheme,
-  Divider
+  Divider,
+  IconButton
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
@@ -17,7 +18,8 @@ import {
   Analytics as AnalyticsIcon,
   People as PeopleIcon,
   Settings as SettingsIcon,
-  Chat as ChatIcon
+  Chat as ChatIcon,
+  Close as CloseIcon
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 
@@ -60,7 +62,7 @@ const menuItems = [
   }
 ];
 
-const SidebarContent = () => {
+const SidebarContent = ({ onMobileClose }) => {
   const theme = useTheme();
   const location = useLocation();
 
@@ -112,6 +114,10 @@ const SidebarContent = () => {
       ));
   };
 
+  const handleDrawerToggle = () => {
+    // Add your logic here to handle the drawer toggle
+  };
+
   return (
     <Box sx={{ 
       py: 2,
@@ -119,7 +125,13 @@ const SidebarContent = () => {
       display: 'flex',
       flexDirection: 'column'
     }}>
-      <Box sx={{ px: 3, mb: 4 }}>
+      <Box sx={{ 
+        px: 3, 
+        mb: 4,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }}>
         <motion.div
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
@@ -136,6 +148,20 @@ const SidebarContent = () => {
             DASHBOARD
           </Typography>
         </motion.div>
+        <IconButton 
+          onClick={onMobileClose} 
+          sx={{ 
+            display: { xs: 'block', sm: 'none' },
+            color: 'text.secondary',
+            '&:hover': {
+              backgroundColor: 'transparent'
+            }
+          }}
+          disableRipple
+          TouchRippleProps={{ style: { display: 'none' } }}
+        >
+          <CloseIcon />
+        </IconButton>
       </Box>
 
       <List component="nav" sx={{ px: 2 }}>
