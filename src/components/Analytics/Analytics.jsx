@@ -15,7 +15,7 @@ import {
   LineChart,
   Line,
   Legend
-} from 'recharts';
+} from 'recharts/es6';
 
 const MotionPaper = motion(Paper);
 const MotionTypography = motion(Typography);

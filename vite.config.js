@@ -11,4 +11,14 @@ export default defineConfig({
     setupFiles: './src/test/setup.js',
     css: true,
   },
+  build: {
+    rollupOptions: {
+      external: [],
+      output: {
+        manualChunks: {
+          recharts: ['recharts']
+        }
+      }
+    }
+  }
 })
