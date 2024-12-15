@@ -27,17 +27,18 @@ const CreateProjectModal = ({ open, onClose, onSubmit }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const statusOptions = [
-    { value: 'Active', label: 'Active' },
-    { value: 'In Progress', label: 'In Progress' },
-    { value: 'Planning', label: 'Planning' },
+    { value: 'Active', label: 'Publishing' },
+    { value: 'In Progress', label: 'Drafting' },
+    { value: 'Planning', label: 'Research' },
   ];
 
-  // Mock team members data
+  // Mock team members data - AI agents with specific roles
   const teamMembers = [
-    { id: 1, name: 'John Doe' },
-    { id: 2, name: 'Jane Smith' },
-    { id: 3, name: 'Mike Johnson' },
-    { id: 4, name: 'Sarah Wilson' },
+    { id: 1, name: 'Research Officer' },
+    { id: 2, name: 'Content Officer' },
+    { id: 3, name: 'First Officer' },
+    { id: 4, name: 'Intelligence Officer' },
+    { id: 5, name: 'Chief Engineer' },
   ];
 
   const handleChange = (e) => {
