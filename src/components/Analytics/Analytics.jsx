@@ -92,18 +92,26 @@ const Analytics = () => {
       initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       sx={{ 
-        p: 3,
+        p: 2,
         height: '100%',
-        minHeight: 400,
+        minHeight: { xs: 350, md: 380 },
         display: 'flex',
         flexDirection: 'column'
       }}
     >
-      <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+      <Typography 
+        variant="subtitle1" 
+        gutterBottom 
+        sx={{ 
+          fontWeight: 600,
+          letterSpacing: '-0.5px',
+          color: 'text.primary'
+        }}
+      >
         Weekly Task Trends
       </Typography>
       <Box sx={{ flexGrow: 1, width: '100%' }}>
-        <ResponsiveContainer width="100%" height={350}>
+        <ResponsiveContainer width="100%" height={300}>
           <LineChart data={data.weeklyTrends}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="day" />
@@ -134,25 +142,33 @@ const Analytics = () => {
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 0.1 }}
       sx={{ 
-        p: 3,
+        p: 2,
         height: '100%',
-        minHeight: 400,
+        minHeight: { xs: 350, md: 380 },
         display: 'flex',
         flexDirection: 'column'
       }}
     >
-      <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+      <Typography 
+        variant="subtitle1" 
+        gutterBottom 
+        sx={{ 
+          fontWeight: 600,
+          letterSpacing: '-0.5px',
+          color: 'text.primary'
+        }}
+      >
         Task Distribution
       </Typography>
-      <Box sx={{ flexGrow: 1, width: '100%' }}>
-        <ResponsiveContainer width="100%" height={350}>
+      <Box sx={{ flexGrow: 1, width: '100%', display: 'flex', justifyContent: 'center' }}>
+        <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie
               data={data.taskDistribution}
               cx="50%"
               cy="50%"
-              labelLine={false}
-              outerRadius={120}
+              labelLine={true}
+              outerRadius={90}
               fill="#8884d8"
               dataKey="value"
               label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
@@ -161,6 +177,7 @@ const Analytics = () => {
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
+            <Legend verticalAlign="bottom" height={36} />
             <Tooltip />
           </PieChart>
         </ResponsiveContainer>
@@ -173,18 +190,42 @@ const Analytics = () => {
       initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 0.2 }}
-      sx={{ p: 3, height: '100%', minHeight: 400 }}
+      sx={{ 
+        p: 2,
+        height: '100%',
+        minHeight: { xs: 350, md: 380 }
+      }}
     >
-      <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+      <Typography 
+        variant="subtitle1" 
+        gutterBottom 
+        sx={{ 
+          fontWeight: 600,
+          letterSpacing: '-0.5px',
+          color: 'text.primary'
+        }}
+      >
         Top Performing Agents
       </Typography>
       {data.topAgents.map((agent, index) => (
         <Box key={agent.name} sx={{ mb: 3 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-            <Typography variant="body2" color="text.secondary">
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                color: 'text.secondary',
+                fontWeight: 500
+              }}
+            >
               {agent.name}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                color: 'text.secondary',
+                fontWeight: 500
+              }}
+            >
               {agent.score}%
             </Typography>
           </Box>
@@ -211,13 +252,25 @@ const Analytics = () => {
       initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 0.3 }}
-      sx={{ p: 3, height: '100%', minHeight: 400 }}
+      sx={{ 
+        p: 2,
+        height: '100%',
+        minHeight: { xs: 350, md: 380 }
+      }}
     >
-      <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+      <Typography 
+        variant="subtitle1" 
+        gutterBottom 
+        sx={{ 
+          fontWeight: 600,
+          letterSpacing: '-0.5px',
+          color: 'text.primary'
+        }}
+      >
         Agent Performance Metrics
       </Typography>
       <Box sx={{ flexGrow: 1, width: '100%' }}>
-        <ResponsiveContainer width="100%" height={350}>
+        <ResponsiveContainer width="100%" height={300}>
           <BarChart data={data.agentPerformance}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
@@ -241,33 +294,31 @@ const Analytics = () => {
   );
 
   return (
-    <Box sx={{ py: 3 }}>
+    <Box sx={{ py: 2 }}>
       <MotionTypography 
-        variant="h4"
+        variant="h5"
         initial={{ x: -20, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         sx={{ 
-          mb: 4, 
-          fontWeight: 'bold',
-          background: theme => `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent'
+          mb: 3, 
+          fontWeight: 700,
+          letterSpacing: '-0.5px'
         }}
       >
-        Analytics Dashboard
+        Analytics Overview
       </MotionTypography>
 
-      <Grid container spacing={3}>
-        <Grid item xs={12} lg={8}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
           {renderPerformanceChart()}
         </Grid>
-        <Grid item xs={12} lg={4}>
+        <Grid item xs={12}>
           {renderTaskDistribution()}
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12}>
           {renderTopAgents()}
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12}>
           {renderAgentMetrics()}
         </Grid>
       </Grid>
