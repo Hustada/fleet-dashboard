@@ -31,7 +31,6 @@ import {
   TimelineContent,
   TimelineDot,
 } from '@mui/lab';
-import { motion } from 'framer-motion';
 import {
   Close as CloseIcon,
   CheckCircle as SuccessIcon,
@@ -43,7 +42,6 @@ import {
   Analytics as AnalystIcon,
   Brush as DesignerIcon,
   Psychology as ResearcherIcon,
-  Send as SendIcon,
 } from '@mui/icons-material';
 
 const TabPanel = ({ children, value, index, ...other }) => (
@@ -398,27 +396,9 @@ const AgentDetails = ({ open = false, onClose = () => {}, agent = null }) => {
   if (!agent) return null;
 
   const [activeTab, setActiveTab] = React.useState(0);
-  const [messages, setMessages] = React.useState([]);
-  const [newMessage, setNewMessage] = React.useState('');
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
-  };
-
-  const handleSendMessage = () => {
-    if (newMessage.trim()) {
-      setMessages([
-        ...messages,
-        {
-          id: Date.now(),
-          content: newMessage,
-          sender: 'user',
-          timestamp: new Date(),
-          status: 'sent'
-        }
-      ]);
-      setNewMessage('');
-    }
   };
 
   // Dummy data for demonstration
@@ -482,7 +462,6 @@ const AgentDetails = ({ open = false, onClose = () => {}, agent = null }) => {
         <Tabs value={activeTab} onChange={handleTabChange}>
           <Tab label="Activities" />
           <Tab label="Metrics" />
-          <Tab label="Communication" />
           <Tab label="Settings" />
         </Tabs>
 
@@ -495,76 +474,6 @@ const AgentDetails = ({ open = false, onClose = () => {}, agent = null }) => {
         </TabPanel>
 
         <TabPanel value={activeTab} index={2}>
-          <Box sx={{ height: '400px', display: 'flex', flexDirection: 'column' }}>
-            <Box sx={{ flexGrow: 1, overflow: 'auto', mb: 2 }}>
-              {messages.map((message) => (
-                <Box
-                  key={message.id}
-                  sx={{
-                    display: 'flex',
-                    justifyContent: message.sender === 'user' ? 'flex-end' : 'flex-start',
-                    mb: 1,
-                  }}
-                >
-                  <Paper
-                    sx={{
-                      p: 2,
-                      maxWidth: '70%',
-                      bgcolor: message.sender === 'user' ? 'primary.main' : 'background.paper',
-                      color: message.sender === 'user' ? 'primary.contrastText' : 'text.primary',
-                    }}
-                  >
-                    <Typography variant="body1">{message.content}</Typography>
-                    <Typography variant="caption" sx={{ display: 'block', mt: 0.5, opacity: 0.7 }}>
-                      {new Date(message.timestamp).toLocaleTimeString()}
-                    </Typography>
-                  </Paper>
-                </Box>
-              ))}
-            </Box>
-            <Paper
-              sx={{
-                p: 2,
-                mt: 'auto',
-                bgcolor: 'background.paper',
-              }}
-              elevation={3}
-            >
-              <Grid container spacing={2}>
-                <Grid item xs>
-                  <TextField
-                    fullWidth
-                    placeholder="Type a message or command..."
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSendMessage();
-                      }
-                    }}
-                    multiline
-                    maxRows={4}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item>
-                  <IconButton
-                    color="primary"
-                    onClick={handleSendMessage}
-                    aria-label="send message"
-                    disabled={!newMessage.trim()}
-                    sx={{ height: '100%' }}
-                  >
-                    <SendIcon />
-                  </IconButton>
-                </Grid>
-              </Grid>
-            </Paper>
-          </Box>
-        </TabPanel>
-
-        <TabPanel value={activeTab} index={3}>
           <SettingsPanel />
         </TabPanel>
       </Box>
