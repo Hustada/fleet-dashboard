@@ -1,10 +1,11 @@
-import React from 'react';
-import { Box, Container, Typography, Card, Grid, IconButton, Chip, useTheme } from '@mui/material';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { Box, Container, Typography, Card, Grid, IconButton, Chip, useTheme, Button } from '@mui/material';
+import { motion, AnimatePresence } from 'framer-motion';
 import AddIcon from '@mui/icons-material/Add';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import GroupIcon from '@mui/icons-material/Group';
+import CreateProjectModal from '../components/Projects/CreateProjectModal';
 
 // Mock data for projects - replace with real data later
 const projects = [
@@ -80,7 +81,7 @@ const ProjectCard = ({ project }) => {
           },
           bgcolor: 'background.paper',
           borderRadius: 2,
-          minHeight: 200, // Ensure minimum height
+          minHeight: 200,
         }}
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
@@ -131,6 +132,21 @@ const ProjectCard = ({ project }) => {
 
 const Projects = () => {
   const theme = useTheme();
+  const [projectsList, setProjectsList] = useState(projects);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCreateProject = (newProject) => {
+    setProjectsList(prev => [newProject, ...prev]);
+    handleCloseModal();
+  };
 
   return (
     <Container maxWidth="xl">
@@ -152,27 +168,40 @@ const Projects = () => {
               Projects
             </Typography>
           </Box>
-          <IconButton 
-            sx={{ 
-              bgcolor: 'primary.main',
-              color: 'white',
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+            onClick={handleOpenModal}
+            sx={{
+              px: 2,
+              py: 1,
+              borderRadius: 1,
               '&:hover': {
                 bgcolor: 'primary.dark',
               },
             }}
           >
-            <AddIcon />
-          </IconButton>
+            Add Project
+          </Button>
         </Box>
 
         <Grid container spacing={3}>
-          {projects.map((project) => (
+          {projectsList.map((project) => (
             <Grid item xs={12} sm={6} md={4} key={project.id}>
               <ProjectCard project={project} />
             </Grid>
           ))}
         </Grid>
       </Box>
+
+      {isModalOpen && (
+        <CreateProjectModal
+          open={isModalOpen}
+          onClose={handleCloseModal}
+          onSubmit={handleCreateProject}
+        />
+      )}
     </Container>
   );
 };

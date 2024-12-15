@@ -17,8 +17,8 @@ import {
   Legend
 } from 'recharts/es6';
 
-const MotionPaper = motion(Paper);
-const MotionTypography = motion(Typography);
+const MotionPaper = motion(Paper, { forwardMotionProps: true });
+const MotionTypography = motion(Typography, { forwardMotionProps: true });
 
 const Analytics = () => {
   const theme = useTheme();
@@ -89,8 +89,9 @@ const Analytics = () => {
 
   const renderPerformanceChart = () => (
     <MotionPaper
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
       sx={{ 
         p: 2,
         height: '100%',
@@ -138,9 +139,9 @@ const Analytics = () => {
 
   const renderTaskDistribution = () => (
     <MotionPaper
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.1 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0.1 }}
       sx={{ 
         p: 2,
         height: '100%',
@@ -187,9 +188,9 @@ const Analytics = () => {
 
   const renderTopAgents = () => (
     <MotionPaper
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.2 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0.2 }}
       sx={{ 
         p: 2,
         height: '100%',
@@ -249,9 +250,9 @@ const Analytics = () => {
 
   const renderAgentMetrics = () => (
     <MotionPaper
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.3 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0.3 }}
       sx={{ 
         p: 2,
         height: '100%',
