@@ -6,6 +6,7 @@ import ChatPanel from '../Chat/ChatPanel';
 import Footer from './Footer';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useThemeMode } from '../../contexts/ThemeContext';
+import ParticlesBackground from '../Background/ParticlesBackground';
 
 const DRAWER_WIDTH = 280;
 const CHAT_WIDTH = 320;
@@ -97,6 +98,7 @@ const MainLayout = ({ children }) => {
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
+      <ParticlesBackground />
       {/* Sidebar */}
       <Box
         component="nav"
