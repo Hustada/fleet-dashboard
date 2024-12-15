@@ -88,7 +88,7 @@ const MainLayout = ({ children }) => {
               </IconButton>
             </Box>
             <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
-              {drawer}
+              <SidebarContent onMobileClose={handleDrawerToggle} />
             </Box>
           </motion.div>
         </>
@@ -99,61 +99,111 @@ const MainLayout = ({ children }) => {
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
       <ParticlesBackground />
-      {/* Sidebar */}
+      
+      <AppBar
+        position="fixed"
+        sx={{
+          width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
+          ml: { sm: `${DRAWER_WIDTH}px` },
+          bgcolor: 'background.paper',
+          borderBottom: `1px solid ${theme.palette.divider}`,
+        }}
+        elevation={0}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ 
+              mr: 2, 
+              display: { sm: 'none' },
+              color: theme.palette.mode === 'light' ? 'primary.main' : 'inherit',
+              '&:hover': {
+                backgroundColor: 'transparent'
+              }
+            }}
+            disableRipple
+            TouchRippleProps={{ style: { display: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <IconButton 
+              onClick={toggleTheme}
+              sx={{ 
+                color: theme.palette.mode === 'light' ? 'primary.main' : 'inherit',
+                '&:hover': {
+                  backgroundColor: 'transparent'
+                }
+              }}
+              disableRipple
+              TouchRippleProps={{ style: { display: 'none' } }}
+            >
+              {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+            </IconButton>
+            <Badge badgeContent={4} color="error">
+              <IconButton 
+                sx={{ 
+                  color: theme.palette.mode === 'light' ? 'primary.main' : 'inherit',
+                  '&:hover': {
+                    backgroundColor: 'transparent'
+                  }
+                }}
+                disableRipple
+                TouchRippleProps={{ style: { display: 'none' } }}
+              >
+                <NotificationsIcon />
+              </IconButton>
+            </Badge>
+            <IconButton 
+              onClick={handleChatToggle}
+              sx={{ 
+                color: theme.palette.mode === 'light' ? 'primary.main' : 'inherit',
+                '&:hover': {
+                  backgroundColor: 'transparent'
+                }
+              }}
+              disableRipple
+              TouchRippleProps={{ style: { display: 'none' } }}
+            >
+              <ChatIcon />
+            </IconButton>
+            <Avatar
+              alt="User"
+              src="/path/to/user-image.jpg"
+              sx={{ width: 32, height: 32 }}
+            />
+          </Box>
+        </Toolbar>
+      </AppBar>
+
       <Box
         component="nav"
-        sx={{
-          width: { sm: DRAWER_WIDTH },
-          flexShrink: { sm: 0 },
-        }}
+        sx={{ width: { sm: DRAWER_WIDTH }, flexShrink: { sm: 0 } }}
       >
         {/* Mobile drawer */}
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true,
-            disableRestoreFocus: true,
-            BackdropProps: {
-              style: { backgroundColor: 'rgba(0, 0, 0, 0.5)' },
-              invisible: false,
-              transitionDuration: 0
-            }
-          }}
-          transitionDuration={0}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-              width: { xs: '100%', sm: DRAWER_WIDTH },
-              bgcolor: 'background.paper',
-              borderRight: `1px solid ${theme.palette.divider}`,
-            },
-            '& .MuiBackdrop-root': {
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            }
-          }}
-        >
-          <SidebarContent onMobileClose={handleDrawerToggle} />
-        </Drawer>
-
-        {/* Desktop drawer */}
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-              width: DRAWER_WIDTH,
-              bgcolor: 'background.paper',
-              borderRight: `1px solid ${theme.palette.divider}`,
-            },
-          }}
-          open
-        >
-          <SidebarContent />
-        </Drawer>
+        {isMobile ? (
+          <MobileDrawer />
+        ) : (
+          <Drawer
+            variant="permanent"
+            sx={{
+              display: { xs: 'none', sm: 'block' },
+              '& .MuiDrawer-paper': {
+                boxSizing: 'border-box',
+                width: DRAWER_WIDTH,
+                borderRight: `1px solid ${theme.palette.divider}`,
+                bgcolor: 'background.darker',
+              },
+            }}
+            open
+          >
+            <SidebarContent />
+          </Drawer>
+        )}
       </Box>
 
       {/* Main content */}
@@ -164,87 +214,6 @@ const MainLayout = ({ children }) => {
         minHeight: '100vh',
         width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` }
       }}>
-        {/* App Bar */}
-        <AppBar
-          position="fixed"
-          sx={{
-            width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
-            ml: { sm: `${DRAWER_WIDTH}px` },
-            bgcolor: 'background.paper',
-            borderBottom: `1px solid ${theme.palette.divider}`,
-          }}
-          elevation={0}
-        >
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ 
-                mr: 2, 
-                display: { sm: 'none' },
-                color: theme.palette.mode === 'light' ? 'primary.main' : 'inherit',
-                '&:hover': {
-                  backgroundColor: 'transparent'
-                }
-              }}
-              disableRipple
-              TouchRippleProps={{ style: { display: 'none' } }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <IconButton 
-                onClick={toggleTheme}
-                sx={{ 
-                  color: theme.palette.mode === 'light' ? 'primary.main' : 'inherit',
-                  '&:hover': {
-                    backgroundColor: 'transparent'
-                  }
-                }}
-                disableRipple
-                TouchRippleProps={{ style: { display: 'none' } }}
-              >
-                {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
-              </IconButton>
-              <Badge badgeContent={4} color="error">
-                <IconButton 
-                  sx={{ 
-                    color: theme.palette.mode === 'light' ? 'primary.main' : 'inherit',
-                    '&:hover': {
-                      backgroundColor: 'transparent'
-                    }
-                  }}
-                  disableRipple
-                  TouchRippleProps={{ style: { display: 'none' } }}
-                >
-                  <NotificationsIcon />
-                </IconButton>
-              </Badge>
-              <IconButton 
-                onClick={handleChatToggle}
-                sx={{ 
-                  color: theme.palette.mode === 'light' ? 'primary.main' : 'inherit',
-                  '&:hover': {
-                    backgroundColor: 'transparent'
-                  }
-                }}
-                disableRipple
-                TouchRippleProps={{ style: { display: 'none' } }}
-              >
-                <ChatIcon />
-              </IconButton>
-              <Avatar
-                alt="User"
-                src="/path/to/user-image.jpg"
-                sx={{ width: 32, height: 32 }}
-              />
-            </Box>
-          </Toolbar>
-        </AppBar>
-
         {/* Main Content Area */}
         <Box
           component="main"

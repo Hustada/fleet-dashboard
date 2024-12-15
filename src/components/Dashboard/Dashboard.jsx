@@ -217,7 +217,7 @@ const Dashboard = () => {
         animate={{ x: 0, opacity: 1 }}
         sx={{ mb: 4, fontWeight: 'bold' }}
       >
-        AI Agents Dashboard
+        Agents Dashboard
       </MotionTypography>
 
       <Grid container spacing={3}>

@@ -65,113 +65,125 @@ const menuItems = [
 const SidebarContent = ({ onMobileClose }) => {
   const theme = useTheme();
   const location = useLocation();
+  const [selectedSection, setSelectedSection] = React.useState('main');
 
-  const renderMenuSection = (section) => {
-    return menuItems
-      .filter(item => item.section === section)
-      .map((item) => (
-        <ListItem 
-          key={item.title} 
-          disablePadding 
-          sx={{ display: 'block' }}
-          component={Link}
-          to={item.path}
-        >
-          <ListItemButton
-            selected={location.pathname === item.path}
-            sx={{
-              minHeight: 48,
-              px: 2.5,
-              borderRadius: 1,
-              mx: 1,
-              '&.Mui-selected': {
-                backgroundColor: 'rgba(79, 195, 247, 0.08)',
-                '&:hover': {
-                  backgroundColor: 'rgba(79, 195, 247, 0.12)',
-                },
-              }
-            }}
-          >
-            <ListItemIcon
-              sx={{
-                minWidth: 40,
-                color: location.pathname === item.path ? 'primary.main' : 'text.secondary'
-              }}
-            >
-              {item.icon}
-            </ListItemIcon>
-            <ListItemText 
-              primary={item.title}
-              primaryTypographyProps={{
-                sx: { 
-                  color: location.pathname === item.path ? 'primary.main' : 'text.primary',
-                  fontWeight: location.pathname === item.path ? 'medium' : 'regular'
-                }
-              }}
-            />
-          </ListItemButton>
-        </ListItem>
-      ));
-  };
-
-  const handleDrawerToggle = () => {
-    // Add your logic here to handle the drawer toggle
+  const handleNavigation = () => {
+    if (onMobileClose) {
+      onMobileClose();
+    }
   };
 
   return (
     <Box sx={{ 
-      py: 2,
-      height: '100%',
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      height: '100%',
+      bgcolor: 'background.darker',
     }}>
-      <Box sx={{ 
-        px: 3, 
-        mb: 4,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}>
+      <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 2 }}>
         <motion.div
-          initial={{ x: -20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.2 }}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 20 }}
         >
-          <Typography 
-            variant="h6" 
-            sx={{ 
-              color: 'primary.main',
-              fontWeight: 'bold',
-              letterSpacing: '0.05em'
-            }}
-          >
-            DASHBOARD
-          </Typography>
+          <Box
+            component="img"
+            src="/logo.png"
+            alt="Logo"
+            sx={{ width: 40, height: 40 }}
+          />
         </motion.div>
-        <IconButton 
-          onClick={onMobileClose} 
-          sx={{ 
-            display: { xs: 'block', sm: 'none' },
-            color: 'text.secondary',
-            '&:hover': {
-              backgroundColor: 'transparent'
-            }
-          }}
-          disableRipple
-          TouchRippleProps={{ style: { display: 'none' } }}
-        >
-          <CloseIcon />
-        </IconButton>
+        <Typography variant="h6" color="primary" sx={{ flexGrow: 1 }}>
+          Content Fleet
+        </Typography>
       </Box>
 
-      <List component="nav" sx={{ px: 2 }}>
-        {renderMenuSection('main')}
+      <List sx={{ flexGrow: 1, px: 2 }}>
+        {menuItems.filter(item => item.section === selectedSection).map((item, index) => (
+          <ListItem key={item.title} disablePadding>
+            <ListItemButton
+              component={Link}
+              to={item.path}
+              selected={location.pathname === item.path}
+              onClick={handleNavigation}
+              sx={{
+                borderRadius: 1,
+                mb: 0.5,
+                '&.Mui-selected': {
+                  bgcolor: 'primary.dark',
+                  '&:hover': {
+                    bgcolor: 'primary.main',
+                  },
+                },
+                '&:hover': {
+                  bgcolor: `${theme.palette.primary.main}20`,
+                },
+              }}
+            >
+              <ListItemIcon sx={{ 
+                color: location.pathname === item.path 
+                  ? 'primary.contrastText' 
+                  : 'text.secondary',
+                minWidth: 40 
+              }}>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText 
+                primary={item.title} 
+                sx={{ 
+                  color: location.pathname === item.path 
+                    ? 'primary.contrastText' 
+                    : 'text.primary' 
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
+        ))}
       </List>
 
       <Divider sx={{ my: 2 }} />
 
-      <List component="nav" sx={{ px: 2 }}>
-        {renderMenuSection('secondary')}
+      <List sx={{ px: 2 }}>
+        {menuItems.filter(item => item.section === 'secondary').map((item, index) => (
+          <ListItem key={item.title} disablePadding>
+            <ListItemButton
+              component={Link}
+              to={item.path}
+              selected={location.pathname === item.path}
+              onClick={handleNavigation}
+              sx={{
+                borderRadius: 1,
+                mb: 0.5,
+                '&.Mui-selected': {
+                  bgcolor: 'primary.dark',
+                  '&:hover': {
+                    bgcolor: 'primary.main',
+                  },
+                },
+                '&:hover': {
+                  bgcolor: `${theme.palette.primary.main}20`,
+                },
+              }}
+            >
+              <ListItemIcon sx={{ 
+                color: location.pathname === item.path 
+                  ? 'primary.contrastText' 
+                  : 'text.secondary',
+                minWidth: 40 
+              }}>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText 
+                primary={item.title}
+                sx={{ 
+                  color: location.pathname === item.path 
+                    ? 'primary.contrastText' 
+                    : 'text.primary' 
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
+        ))}
       </List>
     </Box>
   );
