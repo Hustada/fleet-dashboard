@@ -5,8 +5,16 @@ import { loadSlim } from 'tsparticles-slim';
 
 const ParticlesBackground = () => {
   const theme = useTheme();
-  const particleColor = theme.palette.mode === 'dark' ? '#ffffff' : '#000000';
-  const particleOpacity = theme.palette.mode === 'dark' ? 0.1 : 0.05;
+  const isDark = theme.palette.mode === 'dark';
+  
+  // Adjust settings based on theme
+  const particleColor = isDark ? '#ffffff' : '#000000';
+  const particleOpacity = isDark ? 0.1 : 0.2;
+  const linkOpacity = isDark ? 0.1 : 0.15;
+  const particleSize = isDark ? { min: 1, max: 3 } : { min: 1.5, max: 4 };
+  const particleCount = isDark ? 50 : 70;
+  const moveSpeed = isDark ? 0.5 : 0.8;
+  const linkDistance = isDark ? 150 : 180;
 
   const particlesInit = useCallback(async engine => {
     await loadSlim(engine);
@@ -29,10 +37,10 @@ const ParticlesBackground = () => {
           },
           links: {
             color: particleColor,
-            distance: 150,
+            distance: linkDistance,
             enable: true,
-            opacity: particleOpacity,
-            width: 1,
+            opacity: linkOpacity,
+            width: isDark ? 1 : 1.2,
           },
           move: {
             enable: true,
@@ -41,7 +49,7 @@ const ParticlesBackground = () => {
               default: "bounce",
             },
             random: true,
-            speed: 0.5,
+            speed: moveSpeed,
             straight: false,
           },
           number: {
@@ -49,16 +57,22 @@ const ParticlesBackground = () => {
               enable: true,
               area: 800,
             },
-            value: 50,
+            value: particleCount,
           },
           opacity: {
             value: particleOpacity,
+            animation: {
+              enable: true,
+              speed: 0.5,
+              minimumValue: particleOpacity * 0.7,
+              sync: false
+            }
           },
           shape: {
             type: "circle",
           },
           size: {
-            value: { min: 1, max: 3 },
+            value: particleSize,
           },
         },
         detectRetina: true,
@@ -72,9 +86,9 @@ const ParticlesBackground = () => {
           },
           modes: {
             grab: {
-              distance: 140,
+              distance: isDark ? 140 : 160,
               links: {
-                opacity: 0.2
+                opacity: isDark ? 0.2 : 0.3
               }
             },
           },
