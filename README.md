@@ -1,138 +1,141 @@
 # Fleet Dashboard
 
-A modern, responsive dashboard for managing and monitoring AI agent fleets. Built with React and Material-UI, this application provides real-time insights into agent performance, task distribution, and system analytics.
+A modern, sci-fi themed dashboard for managing and monitoring AI agent fleets. Built with React, Material-UI, and Framer Motion, featuring a responsive design that works seamlessly across desktop and mobile devices.
+
+![Fleet Dashboard](screenshot.png)
 
 ## 🚀 Features
 
-- **Real-time Agent Monitoring**: Track agent status, performance metrics, and task completion rates
-- **Task Management**: Assign, monitor, and analyze task distribution across your agent fleet
-- **Analytics Dashboard**: Visualize key performance indicators and trends
-- **Dark/Light Mode**: Full theme support with customizable color schemes
-- **Responsive Design**: Optimized for all device sizes from mobile to desktop
-- **Real-time Updates**: Live monitoring of agent status and task progress
+- **Real-time Agent Monitoring**
+  - Live status indicators with sci-fi inspired animations
+  - Performance metrics and resource utilization
+  - Interactive data visualization
 
-## 🛠️ Technology Stack
+- **Project Management**
+  - Responsive project cards with status indicators
+  - Infinite scroll on mobile devices
+  - Pagination on desktop views
+  - Quick search and filtering
 
-- **Frontend Framework**: React 18
-- **UI Library**: Material-UI (MUI) v5
-- **Routing**: React Router v6
-- **State Management**: React Context API
-- **Data Visualization**: Recharts
-- **Animations**: Framer Motion
-- **Deployment**: Vercel
-- **Development**:
-  - Vite
-  - ESLint
-  - Prettier
+- **Modern UI/UX**
+  - Sci-fi inspired design language
+  - Dark/Light theme support
+  - Smooth animations and transitions
+  - Particle effects background
+  - Responsive layout for all devices
 
-## 🤖 Agent Types and Roles
+- **Navigation**
+  - Animated mobile drawer
+  - Permanent sidebar on desktop
+  - Real-time notifications
+  - Integrated chat panel
 
-### Task Execution Agents
-- **General Purpose Agents**: Handle a variety of common tasks
-- **Specialized Agents**: Focus on specific task types or domains
-- **Learning Agents**: Adapt and improve performance over time
+## 🛠 Tech Stack
 
-### System Agents
-- **Dispatcher**: Manages task distribution and assignment
-- **Monitor**: Tracks system health and agent performance
-- **Analyzer**: Processes performance data and generates insights
+- **Frontend Framework:** React 18
+- **UI Components:** Material-UI v5
+- **Animations:** Framer Motion
+- **Routing:** React Router v6
+- **State Management:** React Context
+- **Styling:** Emotion (MUI's styling solution)
+- **Charts:** Recharts
+- **Effects:** react-tsparticles
 
-## 📊 Analytics Features
+## 📦 Installation
 
-- **Weekly Task Trends**: Track task completion rates over time
-- **Task Distribution**: Visualize task type allocation
-- **Agent Performance**: Monitor individual agent metrics
-- **System Health**: Track overall fleet performance
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/fleet-dashboard.git
 
-## 🏗️ Project Structure
+# Navigate to project directory
+cd fleet-dashboard
 
-```
-fleet-dashboard/
-├── src/
-│   ├── components/
-│   │   ├── Agents/         # Agent-related components
-│   │   ├── Analytics/      # Analytics and charts
-│   │   ├── Dashboard/      # Main dashboard views
-│   │   ├── Layout/         # Layout components
-│   │   └── Navigation/     # Navigation components
-│   ├── contexts/           # React contexts
-│   ├── theme/              # Theme configuration
-│   ├── utils/              # Utility functions
-│   └── App.jsx            # Main application component
-├── public/                # Static assets
-└── vite.config.js        # Vite configuration
+# Install dependencies
+npm install
+
+# Start development server
+npm start
 ```
 
-## 🚀 Getting Started
+## 🏗 Project Structure
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/fleet-dashboard.git
-   cd fleet-dashboard
-   ```
+```
+src/
+├── components/
+│   ├── Dashboard/        # Main dashboard components
+│   ├── Layout/           # App layout and navigation
+│   ├── Navigation/       # Navigation components
+│   ├── Projects/         # Project management
+│   └── Common/           # Reusable components
+├── theme/                # MUI theme customization
+├── context/              # React context providers
+├── hooks/                # Custom React hooks
+└── pages/                # Main route pages
+```
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+## 🎨 Theming
 
-3. **Start development server**
-   ```bash
-   npm run dev
-   ```
+The application supports both light and dark themes with a consistent sci-fi aesthetic. Theme switching is available through the top navigation bar.
 
-4. **Build for production**
-   ```bash
-   npm run build
-   ```
+### Key Theme Features:
+- Custom color palette optimized for sci-fi aesthetics
+- Consistent spacing and typography system
+- Smooth theme transitions
+- Particle background effects
 
-## 🔧 Configuration
+## 📱 Responsive Design
 
-### Theme Configuration
-The application supports both light and dark modes. Theme settings can be customized in `src/theme/index.js`.
+The dashboard is fully responsive with different optimizations for various screen sizes:
 
-### Agent Configuration
-Agent settings and roles can be configured through the dashboard interface or by modifying the configuration files in the agents directory.
+- **Mobile:** 
+  - Drawer navigation with smooth animations
+  - Infinite scroll for project lists
+  - Optimized card layouts
+  
+- **Desktop:**
+  - Permanent sidebar navigation
+  - Grid-based layouts
+  - Pagination for project lists
 
-## 📈 Performance Monitoring
+## 🔧 Development
 
-The dashboard provides several key metrics for monitoring:
+```bash
+# Run development server
+npm start
 
-- **Agent Status**: Active/Inactive/Error states
-- **Task Completion Rate**: Success/failure ratios
-- **Response Time**: Average task completion time
-- **Resource Usage**: CPU/Memory utilization
-- **Error Rates**: Frequency and types of failures
+# Build for production
+npm run build
 
-## 🔐 Security
+# Run tests
+npm test
+```
 
-- **Authentication**: Secure login system
-- **Authorization**: Role-based access control
-- **Data Protection**: Encrypted communication
-- **Audit Logs**: Comprehensive activity tracking
+## 📈 Performance Considerations
+
+- Optimized bundle size with code splitting
+- Lazy loading of routes and components
+- Efficient state management with React Context
+- Debounced search and scroll handlers
+- Optimized animations with Framer Motion
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Team
-
-- **Mark Hustad** - *Initial work* - [GitHub Profile](https://github.com/markhustad)
-
-## 📞 Support
-
-For support, please open an issue in the GitHub repository or contact the maintainers directly.
-
 ## 🙏 Acknowledgments
 
-- Material-UI team for the excellent component library
-- React team for the amazing framework
-- All contributors who have helped shape this project
+- Material-UI team for the amazing component library
+- Framer Motion for the powerful animation system
+- React team for the excellent framework
+
+---
+
+Built with ❤️ by [Your Name/Team]
