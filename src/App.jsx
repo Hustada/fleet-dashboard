@@ -5,6 +5,7 @@ import getTheme from './theme';
 import MainLayout from './components/Layout/MainLayout';
 import Dashboard from './components/Dashboard/Dashboard';
 import Analytics from './components/Analytics/Analytics';
+import Projects from './pages/Projects';
 import { ThemeProvider, useThemeMode } from './contexts/ThemeContext';
 
 const ThemedApp = () => {
@@ -19,6 +20,7 @@ const ThemedApp = () => {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/analytics" element={<Analytics />} />
+            <Route path="/projects" element={<Projects />} />
           </Routes>
         </MainLayout>
       </BrowserRouter>
