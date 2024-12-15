@@ -190,27 +190,59 @@ ActivityTimeline.propTypes = {
 
 const MetricsPanel = ({ metrics }) => {
   const theme = useTheme();
+  
   return (
-    <Grid container spacing={2}>
+    <Box sx={{ 
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 2,
+      py: 2
+    }}>
       {Object.entries(metrics).map(([key, value]) => (
-        <Grid item xs={12} sm={6} key={key}>
-          <Paper
-            sx={{
-              p: 2,
-              bgcolor: 'background.paper',
-              border: `1px solid ${theme.palette.divider}`
+        <Paper
+          key={key}
+          elevation={1}
+          sx={{
+            width: '100%',
+            maxWidth: 400,
+            p: 3,
+            textAlign: 'center',
+            bgcolor: 'background.paper',
+            borderRadius: 2,
+            transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+            '&:hover': {
+              transform: 'translateY(-2px)',
+              boxShadow: theme.shadows[4]
+            }
+          }}
+        >
+          <Typography 
+            variant="h6" 
+            color="text.secondary" 
+            gutterBottom
+            sx={{ 
+              fontSize: '0.875rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em',
+              fontWeight: 500
             }}
           >
-            <Typography variant="subtitle2" color="text.secondary">
-              {key}
-            </Typography>
-            <Typography variant="h4" color="text.primary" sx={{ mt: 1 }}>
-              {value}
-            </Typography>
-          </Paper>
-        </Grid>
+            {key}
+          </Typography>
+          <Typography 
+            variant="h4" 
+            color="primary"
+            sx={{ 
+              fontWeight: 600,
+              letterSpacing: '-0.5px'
+            }}
+          >
+            {value}
+          </Typography>
+        </Paper>
       ))}
-    </Grid>
+    </Box>
   );
 };
 
