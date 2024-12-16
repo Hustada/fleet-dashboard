@@ -19,6 +19,7 @@ import {
   People as PeopleIcon,
   Settings as SettingsIcon,
   Chat as ChatIcon,
+  SmartToy as SmartToyIcon,
   Close as CloseIcon
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
@@ -40,6 +41,12 @@ const menuItems = [
     title: 'Analytics',
     icon: <AnalyticsIcon />,
     path: '/analytics',
+    section: 'main'
+  },
+  { 
+    title: 'Content Officer',
+    icon: <SmartToyIcon />,
+    path: '/test-content',
     section: 'main'
   },
   { 
