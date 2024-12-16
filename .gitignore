@@ -1,3 +1,9 @@
+# Dependencies
+node_modules/
+dist/
+dist-ssr/
+*.local
+
 # Logs
 logs
 *.log
@@ -7,18 +13,58 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+.history/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Build
+build/
+out/
+.output/
+
+# Debug
+.debug/
+debug.log
+.nyc_output/
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+.temp/
+
+# Secrets and keys
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+*.keystore
+*.jks
+*secret*
+*password*
+*credential*
+*api_key*
+*apikey*
+*token*
+
+# Local development
+local.*
+*.local
+config.local.js
+settings.local.js

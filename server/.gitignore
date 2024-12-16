@@ -5,11 +5,15 @@
 
 # Dependencies
 node_modules/
+package-lock.json
 
 # Logs
 logs
 *.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
 # Runtime data
 pids
@@ -22,7 +26,49 @@ pids
 .vscode/
 *.swp
 *.swo
+.history/
+*.sublime-*
 
 # OS
 .DS_Store
 Thumbs.db
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# Debug
+.debug/
+debug.log
+.nyc_output/
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+.temp/
+dist/
+build/
+
+# Secrets and keys
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+*.keystore
+*.jks
+*secret*
+*password*
+*credential*
+*api_key*
+*apikey*
+*token*
+
+# Local development
+local.*
+*.local
+config.local.js
+settings.local.js
