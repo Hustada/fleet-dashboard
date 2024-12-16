@@ -31,7 +31,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use('/api/agent', agentRoutes);
+app.use('/api', agentRoutes);
 
 // Basic health check route
 app.get('/api/health', (req, res) => {
